@@ -1,0 +1,25 @@
+positions: instr line
+events: alloc_space(MB)
+
+ob=(1) /home/kostik/Code/gosrc/escape/example2/example2.test
+fl=(1) /home/kostik/Code/gosrc/escape/example2/assignment_test.go
+fn=(1) _/home/kostik/Code/gosrc/escape/example2.BenchmarkAssignmentIndirect
+0x4edab5 10 722
+
+ob=(1)
+fl=(2) /usr/local/go/src/testing/benchmark.go
+fn=(2) testing.(*B).runN
+-267716 141 0
+cfl=(1)
+cfn=(1)
+calls=0 * 10
+* * 722
+
+ob=(1)
+fl=(2)
+fn=(3) testing.(*B).launch
++1869 290 0
+cfl=(2)
+cfn=(2)
+calls=0 * 141
+* * 722
