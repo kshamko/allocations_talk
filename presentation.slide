@@ -1,0 +1,59 @@
+Escape Analysis & Profiling og Go Applications
+
+Kanstantsin Shamko
+Erlang developer at [[https://www.idt.net/][IDT]]
+
+* Agenda 
+- Garbage collector
+- Escape analysis
+- Profiling tools
+
+* Memory Model of Golang
+
+.image img/memmodel.png
+  
+- each goroutine has own *stack*
+- *stack* represents state of execution (hold function call and their local variables)
+- default stack size is 8KB. Could be resided by the Go Runtime
+- *heap* holds variables (i.e. pointers, arrays, data structures) 
+- garbage collector cleans *heap*  
+
+* Garbage Collector
+** Heap Befor GC 
+.image img/gc1.jpg
+
+* Garbage Collector
+** Heap After GC 
+.image img/gc2.jpg
+
+- GC locates memory blocks which have no pinters on them
+- GC cleans located blocks
+
+
+* Garbage Collector
+** Memory Usage Graph
+.image img/gc3.jpg
+
+* Garbage Collector
+** GOGC
+
+- env variable
+- controls the agressivness of GC
+- GOGC=200 => GC cycle will start when heap grows to 200% of the prev size
+- GOGC=off
+
+* Garbage Collector
+** Relatively Low Memory Usage
+
+.image img/gc4.jpg
+
+* Garbage Collector
+** Large and Stable Memory Usage
+
+.image img/gc5.jpg
+
+
+* Garbage Collector
+** App lives for a short time
+
+ GOGC=off go build ...
