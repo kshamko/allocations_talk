@@ -57,3 +57,46 @@ Erlang developer at [[https://www.idt.net/][IDT]]
 ** App lives for a short time
 
  GOGC=off go build ...
+
+* Memory Allocation
+
+- 2 types of allocations:
+ - stack allocation (cheap)
+ - heap allocation (expensive)
+- Go Runtime manages allocations automatically. No way to say where to allocate
+
+* Memory Allocation
+** Stack Allocation
+- in a local stack for each goroutine
+- cheap because requires 2 CPU instructions: push to stack, release from stack
+- requires that the lifetime and memory footprint of var can be determined at *compile time*
+
+* Memory Allocation
+** Heap Allocation
+- in a global heap for dynamic allocations
+- expensive because:
+- it is required to search for a chunk of free memory large enough for a var
+- garbage collection
+- occurs at *run time*
+
+* Escape Analysis
+
+- compiler's technique to choose between 2 types of allocations
+- not an optimization but can be used for that
+- rules of escape analysis not a part of Go specification
+- rules could be changed. make an experimentation
+
+* Escape Analysis
+
+.code example1/escape_example.go
+
+ $ go build -gcflags '-m' ./escape_example.go
+
+*-m* - print optimization decision
+
+.image img/escape1.png
+
+ $ go build -gcflags '-m -m' ./escape_example.go
+
+.image img/escape2.png
+
