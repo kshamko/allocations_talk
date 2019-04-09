@@ -4,18 +4,16 @@ type x struct {
 	data *string
 }
 
-// BAD
 func indirect() {
 	str := "xxx"
 	o := new(x)
-	o.data = &str
+	o.data = &str //BAD
 }
 
-// OK
 func direct() {
 	str := "xxx"
 	o := &x{
-		data: &str,
+		data: &str, //OK
 	}
 	_ = o
 }

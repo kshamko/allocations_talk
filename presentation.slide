@@ -1,4 +1,4 @@
-Escape Analysis & Profiling of Go Applications
+Escape Analysis & Profiling Of Go Applications
 
 Kanstantsin Shamko
 Erlang developer at [[https://www.idt.net/][IDT]]
@@ -59,10 +59,10 @@ Go Runtime manages allocations automatically. No way to say where to allocate
 
 * Heap Allocation
 - in a global heap for dynamic allocations
-- expensive because:
-- it is required to search for a chunk of free memory large enough for a var
-- garbage collection
 - occurs at *run time*
+- expensive because:
+1. it is required to search for a chunk of free memory large enough for a var
+2. garbage collection
 
 * Escape Analysis
 
@@ -79,3 +79,75 @@ Go Runtime manages allocations automatically. No way to say where to allocate
  $ go build -gcflags '-m -m' ./escape_example.go
 .image img/escape2.png
 
+* Main Causes of Heap Allocation 
+- indirect assignment
+- indirect call
+- slice and map assignment
+- interfaces
+- ...
+
+* Indirect Assignment 1
+.code example2/assignment.go /^type x/,/^}/
+.code example2/assignment.go /^func indirect/,/^}/
+ $ go build -gcflags '-m -m' ./assignment.go 
+.image img/indirect_assign1.png
+ 
+* Indirect Assignment 2
+.code example2/assignment.go /^func direct/,/^}/
+ $ go build -gcflags '-m -m' ./assignment.go
+.image img/indirect_assign2.png
+
+* Indirect Assignment 3
+.code example2/assignment_test.go /^func BenchmarkAssignmentIndirect/,/^}/
+.code example2/assignment_test.go /^func BenchmarkAssignmentDirect/,/^}/
+ $ go test -benchmem -run=none -bench Assignment -memprofile mem.out
+.image img/indirect_assign3.png
+
+* Indirect Assignment 4
+ $ go tool pprof -alloc_space mem.out
+.image img/indirect_assign4.png
+
+* Indirect Calls
+.code example3/indirect_call.go
+ $ go build -gcflags '-m -m' ./indirect_call.go
+.image img/indirect_call1.png 
+
+* Map & Slice Assignment
+- related to indirect assignment case
+- size of a slice/map is not fixed
+
+* Maps Assignment
+.code example4/map_and_slice.go /type/,/^}/
+.code example4/map_and_slice.go /BenchmarkMap/,/^}/
+ $ go test -gcflags '-m -m' ./map_and_slice.go
+.image img/slice_and_map1.png
+
+* Slice Assignment 1
+.code example4/map_and_slice.go /BenchmarkSlice/,/^}/
+ $ go test -gcflags '-m -m' ./map_and_slice.go
+.image img/slice_and_map2.png
+
+* Slice Assignment 2 
+Not about escape analysis
+.code example4/append.go
+.image img/slice_and_map3.png
+
+* Interfaces
+- can't define exact type at compile time
+- good idea to use code generation (i.e. easyjson)
+
+* Profiling Tools
+
+* Quick List
+- go test framework (benchmarks)
+- pprof (mem usage, cpu utilisation, goroutine traces, etc.. )
+- benchstat
+
+* Conclusion
+- avoid premature optimization
+- don't guess but measure
+- more likely, performance problems caused by heap allocations
+
+* Links
+- https://docs.google.com/document/d/1CxgUBPlx9iJzkz9JWkb6tIpTe5q32QDmz8l0BouG0Cw/edit#heading=h.llaiaboyeyo3
+- https://github.com/kshamko/allocations_talk

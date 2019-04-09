@@ -1,0 +1,122 @@
+**************************
+Memory Model Of Golang
+**************************
+0. Routine stack is in the global heap
+1. How stack works
+----------------
+func main() {	
+	a := 1
+	b := 2
+	c := add(a, b)
+	print(c)
+}
+
+func add(a, b) {
+	var c
+	c = a + b
+	return c
+}
+
+main
+----------
+a  1
+b  2
+c  ?  3 <---| -> then "add area" cleaned and call of print starts
+----------  |
+add         |
+----------  | 
+a  1        | 
+b  2        | 
+c  3 --------
+
+Stack overflow is about this stack if deep recursion happens
+
+2. Goroutine requires 8KB. One of the reasons to control number of routines.
+Few words about scheduler. There was a case of crash due to memory and CPU
+3. Go Runtime could resize stack. Copy and recalc pointers
+
+***********************
+Heap After GC
+***********************
+Naive implementation of GC is Mark and Sweep (earlier versions of GO). there are 2 phases
+- mark. locates memory blocks which have no pointers on them. takes stack allocated vars and traverses through heap to mark reachable object
+- sweep. iteraties thoriugh heap and removes unmarked items 
+
+* iterates through memory twice
+* stop the world problem to avoid the mutation of data
+
+In erlang each process has it's own GC. It's possible because vars passed by value. So it might be a good idea to pass vars by value to reduce number of links.
+
+***********************
+Heap Allocation
+***********************
+Return to slide 6
+
+**********************
+Escape Example
+**********************
+-m - print optimisation decision 
+1. Can be used in build/test
+2. Can be defined multiple times
+
+x is a local var, type is clear but it escapes. Why? Describe later
+
+*************************
+Indirect Assigmnent 1
+************************
+1. reason star-dot-equals
+2. when we are dealing with pointer receivers
+3. dealing with pointer to pointer requires may-point-to analysis to find all objects that a pointer can potentially point to.
+4. https://play.golang.org/p/aiIWGMWpHgY
+
+func main() {
+
+	i := 1
+	p := new(*int)	
+	fmt.Println(p)
+	*p = &i
+	fmt.Println(&i, p)
+	
+	fmt.Println(**p)
+}
+
+*************************
+Indirect Assigmnent 2
+************************
+Important case!!!
+
+*************************
+Indirect Assigmnent 3
+************************
+Few words about benchmark
+
+*************************
+Indirect Assigmnent 4
+************************
+Few words abour pprof
+pprof doesn't show stack allocations considerins them kind of free
+
+*************************
+Map & Slice Assignnment
+************************
+1. maps and slices are refernce types
+2. slice doesn't contain data just pointers to underlying array
+3. map is a pointer to runtime.hmap (runtime type) 
+
+******************
+Interfaces
+******************
+Case with clicks and impressions. When interface was intruduced everything was blown.
+
+**********************
+...
+**********************
+Vars passed to functions with ... notation will escape to heap
+
+**********************
+Tools
+**********************
+benchstat - when optimasation gives up to 5-10% improvement
+
+
+

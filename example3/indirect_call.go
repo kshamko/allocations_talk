@@ -10,9 +10,8 @@ func (x *X) add(i int) {
 
 func indirectCall() {
 	x := new(X)
-
 	f := x.add // BAD
 	f(5)
 
-	x.add(5) //GOOD
+	//x.add(5) //GOOD
 }
