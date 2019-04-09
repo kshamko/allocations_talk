@@ -1,3 +1,3 @@
 #!/bin/sh
 
-go tool pprof -alloc_space mem.out
+go tool pprof -alloc_space mem.jenki

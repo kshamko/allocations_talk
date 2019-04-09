@@ -7,7 +7,6 @@ type x struct {
 // BAD
 func indirect() {
 	str := "xxx"
-
 	o := new(x)
 	o.data = &str
 }
@@ -15,9 +14,8 @@ func indirect() {
 // OK
 func direct() {
 	str := "xxx"
-
 	o := &x{
-		data: &str, //data var is initialized with the address of str var
+		data: &str,
 	}
 	_ = o
 }
