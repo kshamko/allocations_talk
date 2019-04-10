@@ -11,7 +11,7 @@ Erlang developer at [[https://www.idt.net/][IDT]]
 * Memory Model of Golang
 .image img/memmodel.png
 - each goroutine has own *stack*
-- *stack* represents state of execution (hold function call and their local variables)
+- *stack* represents a state of execution (holds function calls and their local variables)
 - default stack size is 8KB. Could be resided by the Go Runtime
 - *heap* holds variables (i.e. pointers, arrays, data structures) 
 - garbage collector cleans *heap*  
@@ -23,7 +23,7 @@ Erlang developer at [[https://www.idt.net/][IDT]]
 
 * Heap After GC 
 .image img/gc2.jpg _ 400
-- GC locates memory blocks which have no pinters on them
+- GC locates memory blocks which have no pointers on them
 - GC cleans located blocks
 
 * Memory Usage Plot
@@ -32,7 +32,7 @@ Erlang developer at [[https://www.idt.net/][IDT]]
 * Garbage Collector Settings
 .html img/gogc.html
 - env variable
-- controls the agressivness of GC
+- controls the aggressiveness of GC
 - GOGC=200 => GC cycle will start when heap grows to 200% of the prev size
 - GOGC=off
 
@@ -53,9 +53,9 @@ Erlang developer at [[https://www.idt.net/][IDT]]
 Go Runtime manages allocations automatically. No way to say where to allocate
 
 * Stack Allocation
-- in a local stack for each goroutine
-- cheap because requires 2 CPU instructions: push to stack, release from stack
-- requires that the lifetime and memory footprint of var can be determined at *compile time*
+- in a local stack of each goroutine
+- cheap because requires 2 CPU instructions: push to the stack, release from the stack
+- requires that the lifetime and memory footprint of a var can be determined at *compile time*
 
 * Heap Allocation
 - in a global heap for dynamic allocations
