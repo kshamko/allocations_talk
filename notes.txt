@@ -39,7 +39,7 @@ Few words about scheduler. There was a case of crash due to memory and CPU
 Heap After GC
 ***********************
 Naive implementation of GC is Mark and Sweep (earlier versions of GO). there are 2 phases
-- mark. locates memory blocks which have no pointers on them. takes stack allocated vars and traverses through heap to mark reachable object
+- mark. locates memory blocks which have no pointers on them. takes pointers to heap allocated vars from the stack and traverses through heap to mark reachable object
 - sweep. iteraties thoriugh heap and removes unmarked items 
 
 * iterates through memory twice
